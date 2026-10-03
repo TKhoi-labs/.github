@@ -3,14 +3,22 @@
 #
 #   uses: TKhoi-labs/.github/.github/workflows/ci.yml@<40-char-sha>
 #
-# The caller pins a commit SHA, so changing this file does not silently change
-# every repository at once. Deploy a new SHA deliberately.
+# The caller pins a commit SHA, so editing this file does not silently change
+# every repository at once.
+#
+# Contract for callers:
+#   * it declares no inputs and no secrets, so `workflow_call` is enough
+#   * it needs the caller's token, scoped by the caller's `permissions:`
 name: ci
 
 on: workflow_call
 
 permissions:
   contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   ci:
