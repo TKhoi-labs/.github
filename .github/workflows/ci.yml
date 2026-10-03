@@ -1,0 +1,25 @@
+---
+# Shared CI entry point (ADR-0003). Every repository in the org calls this as:
+#
+#   uses: TKhoi-labs/.github/.github/workflows/ci.yml@<40-char-sha>
+#
+# The caller pins a commit SHA, so changing this file does not silently change
+# every repository at once. Deploy a new SHA deliberately.
+name: ci
+
+on: workflow_call
+
+permissions:
+  contents: read
+
+jobs:
+  ci:
+    name: ci
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the calling repository
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - name: Placeholder gate
+        run: echo "shared CI ran for ${GITHUB_REPOSITORY}@${GITHUB_SHA}"
